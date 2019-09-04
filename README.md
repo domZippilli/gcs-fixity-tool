@@ -72,10 +72,26 @@ For testing purposes or other kinds of error recovery, you can use the script at
 
 So, for example, to force a hash error on an object, you can run:
 
-`bin/override_hash.sh gs://[YOUR BUCKET]/[YOUR OBJECT] foo`
+`bin/override_hash.sh gs://YOUR_BUCKET/YOUR_OBJECT foo`
 
 This will set the hash to `foo`, which will almost definitely not match a hex-encoded MD5 string, causing the next fixity check of the object to fail.
 
 Similarly, if your fixity record has been corrupted with the wrong hash (such as during a test), you can override the hash to the download hash value calculated during the fixity check to correct it.
 
-`bin/override_hash.sh gs://[YOUR BUCKET]/[YOUR OBJECT] [HASH OF DOWNLOAD]`
+`bin/override_hash.sh gs://YOUR_BUCKET/YOUR_OBJECT YOUR_HASH`
+
+# Pruning the history table
+If you delete some of your archive, or more likely reorganize it, the fixity table will contain many object URLs that are no longer valid. Such entries will cause validation errors when running the verification script. 
+
+If you expect these errors and can confirm they are false positives, you can run:
+
+`bin/prune_fixity_table.sh BUCKET_NAME`
+
+This will:
+    - Create a temporary table
+    - List the bucket into the table
+    - SELECT...
+        - An INNER JOIN of the temp table and the history table, preserving all entries for objects currently found
+        - UNION these results with all records in the history table for other buckets
+    - Overwrite the history table with this result set
+    - Remove the temporary table
