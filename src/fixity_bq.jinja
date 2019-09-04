@@ -1,0 +1,29 @@
+resources:
+  - name: fixity_data
+    type: bigquery_dataset.py
+    properties:
+      name: fixity_data
+      location: US
+      access:
+        - role: OWNER
+          userByEmail: {{ env["username"] }}
+        - role: WRITER
+          userByEmail: {{ env["username"] }}
+
+        - role: OWNER
+          userByEmail: {{ env["project_number"] }}@cloudservices.gserviceaccount.com
+        - role: WRITER
+          userByEmail: {{ env["project_number"] }}@cloudservices.gserviceaccount.com
+
+  - name: fixity_history
+    type: bigquery_table.py
+    properties:
+      name: fixity_history
+      datasetId: $(ref.fixity_data.datasetId)
+      schema:
+        - name: object_url
+          type: STRING
+        - name: md5
+          type: STRING
+        - name: checked
+          type: TIMESTAMP

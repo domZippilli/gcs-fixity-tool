@@ -1,0 +1,11 @@
+imports:
+  - path: src/dm_templates/bigquery/bigquery_dataset.py
+    name: bigquery_dataset.py
+  - path: src/dm_templates/bigquery/bigquery_table.py
+    name: bigquery_table.py
+  - path: src/fixity_bq.jinja
+    name: fixity_bq.jinja
+
+resources:
+  - name: fixity_bq
+    type: fixity_bq.jinja
