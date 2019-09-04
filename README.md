@@ -91,7 +91,7 @@ This will:
     - Create a temporary table
     - List the bucket into the table
     - SELECT...
-        - An INNER JOIN of the temp table and the history table, preserving all entries for objects currently found
-        - UNION these results with all records in the history table for other buckets
+        - A DISTINCT INNER JOIN of the temp table and the history table, preserving all unique entries for objects currently found
+        - UNION these results with all records in the history table for other buckets, discarding any URLs that do not begin with 'gs://'
     - Overwrite the history table with this result set
     - Remove the temporary table

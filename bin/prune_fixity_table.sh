@@ -13,12 +13,13 @@ BUCKET_LIST=$(gsutil ls -r $1**)
 HISTORY_TABLE=fixity_data.fixity_history
 PRUNE_TABLE=fixity_data.fixity_history_prune$$
 PRUNE_QUERY="\
-SELECT a.* FROM $HISTORY_TABLE as a \
+SELECT DISTINCT a.* FROM $HISTORY_TABLE as a \
     INNER JOIN (SELECT object_url as ou FROM $PRUNE_TABLE) as p \
     ON a.object_url = p.ou \
 UNION ALL \
-    SELECT b.* FROM $HISTORY_TABLE as b \
-    WHERE NOT STARTS_WITH(b.object_url, '$BUCKET_NAME') \
+SELECT b.* FROM $HISTORY_TABLE as b \
+    WHERE STARTS_WITH(b.object_url, 'gs://')
+    AND NOT STARTS_WITH(b.object_url, '$BUCKET_NAME') \
 "
 
 function object_json {
