@@ -1,6 +1,6 @@
 # BigQuery
 
-This template creates a BigQuery dataset and table.
+This template creates a BigQuery dataset and table. It is extracted from the [Cloud Foundation Toolkit](https://github.com/GoogleCloudPlatform/cloud-foundation-toolkit/tree/20d235a4636fc502c5534eb51cf81f43301d3422/dm/templates/bigquery).
 
 ## Prerequisites
 - Install [gcloud](https://cloud.google.com/sdk)

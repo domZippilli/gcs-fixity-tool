@@ -6,11 +6,20 @@ Though Google Cloud Storage has numerous built-in steps to guard against and cor
 
 It includes a Google Cloud Deployment manager template to make a BigQuery database for storing Cloud Storage archive fixity data, and scripts to automate fixity checks.
 
+# Prerequisites
+
+## Local
+- Install [gcloud](https://cloud.google.com/sdk)
+- Install [GNU Parallel](https://www.gnu.org/software/parallel/). For example, run `sudo apt install parallel` on Debian/Ubuntu.
+
+## Google Cloud Platform
+- Create a (GCP project)[https://cloud.google.com/resource-manager/docs/creating-managing-projects]
+- Ensure the BigQuery and Deployment Manager APIs are enabled in the [API Library](https://console.cloud.google.com/apis/library).
+- Grant the [`roles/bigquery.dataEditor`, `roles/bigquery.dataOwner` or `roles/bigquery.admin`](https://cloud.google.com/bigquery/docs/access-control) IAM roles to the user or service account you'll be using (check `gcloud info` if you're not sure)
+- Similarly, grant `roles/storage.objectViewer` at a minimum. If you also wish to upload objects with a checksum using this utility, you will need `roles/storage.objectAdmin`.
+
 # Installation
-
-Make sure you have gcloud installed, and have valid credentials with authorization to create BQ datasets and tables when you run `gcloud info`.
-
-Now run:
+From the root directory of this repository, run:
 
 ```shell
 alias dm="gcloud deployment-manager"
@@ -21,7 +30,6 @@ Done!
 # Initializing
 
 ## If you already have data in GCS
-
 You will need to populate the fixity table with entries for every object. Do this by running `bin/populate_fixity_table.sh`. Usage is as follows:
 
 `./populate_fixity_table.sh gs://BUCKET_NAME/`
@@ -31,7 +39,6 @@ This will get a listing of all objects in the bucket and perform a streaming ins
 You can also run this script if many objects are later uploaded without fixity records created for them. It will not break the fixity record for existing objects, as they will have non-null entries that will override any null entries added, even if they are added later.
 
 ## If you do not have data in GCS
-
 Time to start uploading! Use `bin/fixity_upload.sh`. Usage is as follows:
 
 `./fixity_upload.sh TARGET_GCS_PATH FILES_TO_UPLOAD`
@@ -49,7 +56,6 @@ This script will perform a local checksum of the file and upload it to GCS with 
 This process is repeated for each file given. Files are processed serially, so for many small files this can be slow, and for large servers not all resources may be put to use. Consider sharding the file content you wish to upload and perform multiple fixity_upload.sh commands, either manually, or with xargs, GNU Parallel, or similar.
 
 # Verifying Fixity
-
 Simply run `bin/verify_fixity.sh`. The script interrogates the BigQuery fixity history table for the most recent verification of all objects, and returns the ones that are older than a certain threshold, along with their last recorded hash.
 
 It then takes that list and performs the following for each:
@@ -60,7 +66,6 @@ It then takes that list and performs the following for each:
         - If they do not match, exit with an error
 
 # Overriding the latest hash
-
 For testing purposes or other kinds of error recovery, you can use the script at `bin/override_hash.sh` to override the latest hash for an object. Usage is as follows:
 
 `bin/override_hash.sh OBJECT_PATH HASH`
