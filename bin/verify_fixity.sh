@@ -29,7 +29,7 @@ function checksum(){
 # Get the objects that are due for verification
 function get_objects_and_hashes_to_verify {
     echo Querying BigQuery fixity database up to $MAX_RECORDS records... >&2
-    bq -q --format csv query -n$MAX_RECORDS --use_legacy_sql=false "$QUERY" | tail -n+2
+    bq -q --format csv query -n$MAX_RECORDS --use_legacy_sql=false "$QUERY" | tail -n+2 -f
     echo Query complete. >&2
 }
 

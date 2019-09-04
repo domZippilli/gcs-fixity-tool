@@ -9,10 +9,15 @@ function usage(){
 }
 
 BUCKET_NAME=${1?$(usage)}
-BUCKET_LIST=$(gsutil ls -r $1**)
+
+function get_bucket_list {
+    echo Getting bucket list... >&2
+    gsutil ls -r $1** | tail -n+0 -f
+    echo Bucket listing complete. >&2
+}
 
 function object_json {
-    for i in $BUCKET_LIST; do
+    for i in $(get_bucket_list $BUCKET_NAME); do
         echo \
             {  \
                 \"object_url\": \""$i"\", \
@@ -22,4 +27,6 @@ function object_json {
     done
 }
 
+echo Starting BQ insert stream...
 object_json | tee /dev/tty | bq insert fixity_data.fixity_history
+echo BQ insert complete.
