@@ -4,7 +4,7 @@
 function usage(){
     echo >&2
     echo "Usage: $0 gs://BUCKET_NAME/" >&2
-    echo "Prunes the fixity table of references to objects that were deleted in the bucket." >&2
+    echo "Prunes the fixity table of references to objects that were deleted in the bucket, as well as duplicate or non-gs:// entries." >&2
     echo >&2
 }
 
