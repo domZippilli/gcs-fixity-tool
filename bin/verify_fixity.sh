@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 if [ -z $(which parallel) ]; then
-  echo GNU Parallel must be installed. Most Linux distributions will have
+  echo This will be much faster if GNU Parallel is installed.
+  echo Most Linux distributions and Homebrew will have
   echo the \"parallel\" package in their default repositories.
   echo For more info, see https://www.gnu.org/software/parallel/
-  exit 1
 fi
 
 # TODO: Set query timediff values to what is actually desired, such as YEAR, 1
@@ -61,7 +61,22 @@ function verify_object {
 
 export -f checksum get_objects_and_hashes_to_verify verify_object
 
+function map {
+  func=$1
+  data=$2
+if [ -z $(which parallel) ]
+then
+  # Proceed serially
+  for i in $data; do
+    $func $i
+  done
+else
+  # Proceed in parallel
+  $data | parallel -j 200% --delay .25 $func
+fi
+}
+
 # Run the verification in parallel over the records with GNU Parallel.
-get_objects_and_hashes_to_verify | parallel -j 200% --delay .25 verify_object
+map verify_object get_objects_and_hashes_to_verify
 
 echo "Fixity up to date for all objects in table."
