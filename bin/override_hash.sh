@@ -16,5 +16,5 @@ echo \
     {  \
         \"object_url\": \""$1"\", \
         \"md5\":        \""$2"\", \
-        \"checked\":    \""$(date -Iseconds)"\" \
+        \"checked\":    \""$(date +'%Y-%m-%d %H:%M:%S%:z')"\" \
     } | bq insert fixity_data.fixity_history
