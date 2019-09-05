@@ -27,12 +27,12 @@ function checksum_upload(){
 # upload to a BQ streaming insert
 function upload_files() {
     for f in $FILES; do
-        c=$(checksum "$f")
-        checksum_upload $c $f $GCS_PATH
+        chk=$(checksum "$f")
+        checksum_upload $chk $f $GCS_PATH
         echo \
             {  \
                 \"object_url\": \""$GCS_PATH""$f"\", \
-                \"md5\":        \""$c"\", \
+                \"md5\":        \""$chk"\", \
                 \"checked\":    \""$(date -u +'%Y-%m-%dT%H:%M:%S+00:00')"\" \
             }
     done 
