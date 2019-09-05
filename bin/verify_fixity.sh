@@ -61,19 +61,22 @@ function verify_object {
 
 export -f checksum get_objects_and_hashes_to_verify verify_object
 
+# Map a function over the results from a generator
 function map {
   func=$1
-  data=$2
-if [ -z $(which parallel) ]
-then
-  # Proceed serially
-  for i in $($data); do
-    $func $i
-  done
-else
-  # Proceed in parallel
-  $($data) | parallel -j 200% --delay .25 $func
-fi
+  generator=$2
+
+  if [ -z $(which parallel) ]
+  then
+    # Proceed serially
+    for i in $($generator); do
+      $func $i
+    done
+  else
+    # Proceed in parallel
+    $generator | parallel -j 200% --delay .25 $func
+  fi
+  
 }
 
 # Run the verification in parallel over the records with GNU Parallel.
