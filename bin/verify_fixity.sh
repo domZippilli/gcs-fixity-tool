@@ -67,16 +67,16 @@ function map {
 if [ -z $(which parallel) ]
 then
   # Proceed serially
-  for i in $data; do
+  for i in $($data); do
     $func $i
   done
 else
   # Proceed in parallel
-  $data | parallel -j 200% --delay .25 $func
+  $($data) | parallel -j 200% --delay .25 $func
 fi
 }
 
 # Run the verification in parallel over the records with GNU Parallel.
-map verify_object $(get_objects_and_hashes_to_verify)
+map verify_object get_objects_and_hashes_to_verify
 
 echo "Fixity up to date for all objects in table."
