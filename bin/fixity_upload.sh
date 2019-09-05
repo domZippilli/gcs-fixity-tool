@@ -33,7 +33,7 @@ function upload_files() {
             {  \
                 \"object_url\": \""$GCS_PATH""$f"\", \
                 \"md5\":        \""$c"\", \
-                \"checked\":    \""$(date +'%Y-%m-%d %H:%M:%S%:z')"\" \
+                \"checked\":    \""$(date -u +'%Y-%m-%dT%H:%M:%S+00:00')"\" \
             }
     done 
 }

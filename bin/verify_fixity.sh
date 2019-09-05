@@ -50,7 +50,7 @@ function verify_object {
             {  \
                 \"object_url\": \""$o"\", \
                 \"md5\":        \""$newhash"\", \
-                \"checked\":    \""$(date +'%Y-%m-%d %H:%M:%S%:z')"\" \
+                \"checked\":    \""$(date -u +'%Y-%m-%dT%H:%M:%S+00:00')"\" \
             } | bq insert fixity_data.fixity_history 
     else
       echo !!!HASH MISMATCH!!!
