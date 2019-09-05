@@ -77,6 +77,6 @@ fi
 }
 
 # Run the verification in parallel over the records with GNU Parallel.
-map verify_object get_objects_and_hashes_to_verify
+map verify_object $(get_objects_and_hashes_to_verify)
 
 echo "Fixity up to date for all objects in table."
