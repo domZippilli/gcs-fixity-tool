@@ -59,11 +59,11 @@ This process is repeated for each file given. Files are processed serially, so f
 Simply run `bin/verify_fixity.sh`. The script interrogates the BigQuery fixity history table for the most recent verification of all objects, and returns the ones that are older than a certain threshold, along with their last recorded hash.
 
 It then takes that list and performs the following for each:
-    - Store the hash from the last fixity check in memory
-    - Get the object data, hash it, and store this hash in memory
-    - Compare the hashes
-        - If they match, record a new verification record
-        - If they do not match, exit with an error
+  - Store the hash from the last fixity check in memory
+  - Get the object data, hash it, and store this hash in memory
+  - Compare the hashes
+      - If they match, record a new verification record
+      - If they do not match, exit with an error
 
 # Overriding the latest hash
 For testing purposes or other kinds of error recovery, you can use the script at `bin/override_hash.sh` to override the latest hash for an object. Usage is as follows:
