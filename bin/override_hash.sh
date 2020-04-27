@@ -14,7 +14,7 @@ HASH=${2?$(usage)}
 
 echo \
     {  \
-        \"object_url\": \""$1"\", \
-        \"md5\":        \""$2"\", \
+        \"object_url\": \""$OBJECT_PATH"\", \
+        \"md5\":        \""$HASH"\", \
         \"checked\":    \""$(date -u +'%Y-%m-%dT%H:%M:%S+00:00')"\" \
     } | bq insert fixity_data.fixity_history
